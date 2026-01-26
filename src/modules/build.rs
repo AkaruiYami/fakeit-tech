@@ -2,6 +2,7 @@ use colored::*;
 use rand::Rng;
 use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
+use std::{thread, time::Duration};
 
 use crate::engine::FakeModule;
 
@@ -28,31 +29,41 @@ impl FakeModule for BuildModule {
             "Finalizing build",
         ];
 
-        let colors = [
-            Color::Red,
-            Color::Green,
-            Color::Yellow,
-            Color::Blue,
-            Color::Magenta,
-            Color::Cyan,
+        let colors = [Color::Green, Color::Blue, Color::Magenta, Color::Cyan];
+
+        let fake_username = "user01x";
+        let roots = [
+            format!("/home/{}/projects/app", fake_username),
+            format!("/home/{}/dev/fakeit", fake_username),
+            "/build/workspace".to_string(),
+            "/tmp/build-cache".to_string(),
+            "/opt/sdk/resources".to_string(),
         ];
 
-        let num_steps = rng.random_range(1..=2);
-        let chosen_steps: Vec<_> = steps.choose_multiple(rng, num_steps).collect();
+        // Divide 0..100% evenly across steps
+        let total_steps = steps.len();
+        let mut current_percent = 0;
 
-        for step in chosen_steps {
+        for (i, step) in steps.iter().enumerate() {
             let color = colors.choose(rng).unwrap();
-            let percent: u8 = rng.random_range(1..=100);
+
+            // Calculate approximate progress range for this step
+            let step_percent_start = current_percent;
+            let step_percent_end = ((i + 1) * 100 / total_steps) as u8;
 
             // Resource-heavy steps
             if step.contains("Collecting")
                 || step.contains("Loading")
                 || step.contains("Processing")
             {
-                let count = rng.random_range(6..15);
+                let num_files = rng.random_range(7..55);
+                for j in 0..num_files {
+                    let path = generate_fake_path(rng, &roots);
 
-                for _ in 0..count {
-                    let path = generate_fake_path(rng);
+                    // Progress increments within step
+                    let percent = step_percent_start
+                        + (((step_percent_end - step_percent_start) as usize * j) / num_files)
+                            as u8;
 
                     println!(
                         "[{}%] {} -> {}",
@@ -60,10 +71,14 @@ impl FakeModule for BuildModule {
                         step.color(*color),
                         path.bright_black()
                     );
+
+                    let delay_ms = rng.random_range(50..=350);
+                    thread::sleep(Duration::from_millis(delay_ms));
                 }
             } else {
-                let chance: f32 = rng.random();
+                let percent = step_percent_end;
 
+                let chance: f32 = rng.random();
                 if chance < 0.1 {
                     println!(
                         "{}",
@@ -74,24 +89,27 @@ impl FakeModule for BuildModule {
                         "{}",
                         format!("[ERROR] {}: failed to resolve dependency", step).red()
                     );
+                    let delay_ms = rng.random_range(500..=750);
+                    thread::sleep(Duration::from_millis(delay_ms));
                 } else {
                     println!("[{}%] {}", percent, step.color(*color));
                 }
+
+                // Simulate processing time
+                let delay_ms = rng.random_range(300..=650);
+                thread::sleep(Duration::from_millis(delay_ms));
             }
+
+            current_percent = step_percent_end;
         }
+
+        // Build complete
+        println!("{}", "[100%] Build finished successfully!".green().bold());
     }
 }
 
-fn generate_fake_path(rng: &mut ThreadRng) -> String {
-    let fake_username = "user01x";
-    let roots = [
-        format!("/home/{}/projects/app", fake_username),
-        format!("/home/{}/dev/fakeit", fake_username),
-        "/build/workspace".to_string(),
-        "/tmp/build-cache".to_string(),
-        "/opt/sdk/resources".to_string(),
-    ];
-
+// Generate fake paths
+fn generate_fake_path(rng: &mut ThreadRng, roots: &[String]) -> String {
     let folders = [
         "src", "core", "utils", "assets", "textures", "audio", "shaders", "config", "vendor",
         "modules", "cache",
@@ -108,10 +126,9 @@ fn generate_fake_path(rng: &mut ThreadRng) -> String {
 
     let root = roots.choose(rng).unwrap();
 
-    // Random depth (2–4 folders)
-    let depth = rng.random_range(2..=4);
-
-    let mut path = String::from(root);
+    // Random depth
+    let depth = rng.random_range(2..=5);
+    let mut path = root.clone();
 
     for _ in 0..depth {
         let folder = folders.choose(rng).unwrap();

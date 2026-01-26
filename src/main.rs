@@ -10,23 +10,17 @@ use config_loader::load_config;
 use modules::load_modules;
 
 fn main() {
-    println!("fakeit-tech starting...\n");
-
     let config = load_config();
-
-    println!("Loaded config: {:#?}\n", config);
 
     let mut rng = rng();
 
     let modules = load_modules(&config.modules);
 
-    loop {
-        for module in &modules {
-            module.run(&mut rng);
+    for module in &modules {
+        module.run(&mut rng);
 
-            let delay = rng.random_range(config.core.delay_min..config.core.delay_max);
+        let delay = rng.random_range(config.core.delay_min..config.core.delay_max);
 
-            thread::sleep(Duration::from_millis(delay));
-        }
+        thread::sleep(Duration::from_millis(delay));
     }
 }
