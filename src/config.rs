@@ -17,5 +17,4 @@ pub struct ModuleConfig {
     pub build: bool,
     pub hack: bool,
     pub ai: bool,
-    pub network: bool,
 }

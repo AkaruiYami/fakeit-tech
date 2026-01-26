@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use rand::rngs::ThreadRng;
 
 pub trait FakeModule {
