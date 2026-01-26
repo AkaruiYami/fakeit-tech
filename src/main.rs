@@ -1,26 +1,50 @@
-mod config;
-mod config_loader;
+// mod config;
+// mod config_loader;
 mod engine;
 mod modules;
 
-use rand::{Rng, rng};
-use std::{thread, time::Duration};
-
-use config_loader::load_config;
-use modules::load_modules;
+use modules::registry;
 
 fn main() {
-    let config = load_config();
+    let mut rng = rand::rng();
 
-    let mut rng = rng();
+    // Fetch registered modules
+    let mut active_modules = registry::get_registered();
 
-    let modules = load_modules(&config.modules);
+    if active_modules.is_empty() {
+        println!("No modules registered. Exiting.");
+        return;
+    }
 
-    for module in &modules {
-        module.run(&mut rng);
+    // Optional: filter by command-line args
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    let mut loop_mode = false;
+    let args_cleaned: Vec<String> = args
+        .iter()
+        .filter(|a| {
+            if a == &"--loop" {
+                loop_mode = true;
+                false
+            } else {
+                true
+            }
+        })
+        .cloned()
+        .collect();
 
-        let delay = rng.random_range(config.core.delay_min..config.core.delay_max);
+    if !args_cleaned.is_empty() {
+        active_modules.retain(|m| args_cleaned.contains(&m.name().to_string()));
+    }
 
-        thread::sleep(Duration::from_millis(delay));
+    if loop_mode {
+        loop {
+            for module in &active_modules {
+                module.run(&mut rng);
+            }
+        }
+    } else {
+        for module in &active_modules {
+            module.run(&mut rng);
+        }
     }
 }

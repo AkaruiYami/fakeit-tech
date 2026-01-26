@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use colored::*;
 use rand::Rng;
 use rand::rngs::ThreadRng;

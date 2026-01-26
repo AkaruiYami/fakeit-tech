@@ -5,6 +5,7 @@ use rand::seq::IndexedRandom;
 use std::{thread, time::Duration};
 
 use crate::engine::FakeModule;
+use crate::modules::registry;
 
 pub struct BuildModule;
 
@@ -141,4 +142,9 @@ fn generate_fake_path(rng: &mut ThreadRng, roots: &[String]) -> String {
     let id: u16 = rng.random_range(1..=999);
 
     format!("{}/{}_{}.{}", path, name, id, ext)
+}
+
+#[ctor::ctor] // <-- run at compile-time before main
+fn register_build() {
+    registry::register(Box::new(BuildModule));
 }
