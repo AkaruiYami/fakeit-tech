@@ -15,13 +15,21 @@ impl FakeModule for AiModule {
         "ai"
     }
 
-    // TODO: Let the percentage properly sequential instead of jumble random
     fn run(&self, rng: &mut ThreadRng) {
-        let percent = rng.random_range(1..=100);
+        let mut curr_percent = 0;
 
-        println!("{}", format!("[AI] Training model: {}%", percent).blue());
-        let delay_ms = rng.random_range(50..=350);
-        thread::sleep(Duration::from_millis(delay_ms));
+        while curr_percent < 100 {
+            println!(
+                "{}",
+                format!("[AI] Training model: {}%", curr_percent).blue()
+            );
+            let delay_ms = rng.random_range(50..=350);
+            thread::sleep(Duration::from_millis(delay_ms));
+            if rng.random_range(0..=100) <= 50 {
+                curr_percent += 1;
+            }
+        }
+        println!("{}", format!("[AI] Training model: {}%", 100).green());
     }
 }
 
