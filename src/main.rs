@@ -39,11 +39,13 @@ fn main() {
     if loop_mode {
         loop {
             for module in &active_modules {
+                print!("\x1B[2J\x1B[1;1H");
                 module.run(&mut rng);
             }
         }
     } else {
         for module in &active_modules {
+            print!("\x1B[2J\x1B[1;1H");
             module.run(&mut rng);
         }
     }
