@@ -12,15 +12,6 @@ Languages: Rust (100%)
 - `--loop` mode to repeat output indefinitely for live demos
 - Simple to extend by adding new modules under `src/modules/`
 
-## What I inspected
-I inspected the `src/modules/` directory and found the following modules (each registers itself at compile-time with the central registry):
-
-- `ai` — Simulates AI training progress lines (percent increments with color).
-- `build` — Fake build pipeline output (file paths, step-by-step progress, warnings/errors).
-- `cypher-square` — Matrix-style grid animation with continuously mutating characters.
-- `hack` — Short flashy "scanning" output with randomized IP addresses.
-
-Each module implements the project trait `FakeModule` and registers itself via `registry::register(Box::new(...))` using `#[ctor::ctor]`.
 
 ## Quickstart (run from source)
 1. Clone the repo:
@@ -116,11 +107,6 @@ git checkout -b feat/<name>
 ```
 3. Implement the module or change, add tests or examples, and open a PR.
 
-## License
-Add your chosen license (e.g., MIT). Example:
-```
-MIT License
-```
 
 ## Contact
 Maintained by AkaruiYami — open issues for bugs, feature requests, or module ideas.
