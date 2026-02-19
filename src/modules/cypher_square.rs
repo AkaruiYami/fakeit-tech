@@ -3,6 +3,7 @@ use std::thread;
 use std::time::Duration;
 
 use colored::*;
+use crossterm::terminal;
 use rand::Rng;
 use rand::rngs::ThreadRng;
 
@@ -23,10 +24,13 @@ impl FakeModule for CypherSquare {
             std::process::exit(0);
         });
 
-        let width = 25;
-        let height = 30;
         let mutate_delay = 200; // ms
         let error_chance = 0.07;
+
+        let (width, height) = match terminal::size() {
+            Ok((w, h)) => (w as usize, h as usize),
+            Err(_) => (80, 24),
+        };
 
         print!("\x1B[?25l");
         io::stdout().flush().unwrap();
