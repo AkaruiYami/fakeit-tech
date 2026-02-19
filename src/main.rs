@@ -1,52 +1,54 @@
 // mod config;
 // mod config_loader;
+mod cli;
 mod engine;
 mod modules;
 
+use clap::Parser;
 use modules::registry;
 
+use crate::cli::Cli;
+
 fn main() {
-    let mut rng = rand::rng();
+    let cmd = Cli::parse();
 
-    // Fetch registered modules
-    let mut active_modules = registry::get_registered();
+    if cmd.list {
+        let registered_modules = registry::get_registered();
+        println!("The following are modules that can be call:");
+        for module in registered_modules {
+            let name = module.name();
+            println!("- {}", name);
+        }
+    } else {
+        let mut rng = rand::rng();
 
-    if active_modules.is_empty() {
-        println!("No modules registered. Exiting.");
-        return;
-    }
+        // Fetch registered modules
+        let mut active_modules = registry::get_registered();
 
-    // Optional: filter by command-line args
-    let args: Vec<String> = std::env::args().skip(1).collect();
-    let mut loop_mode = false;
-    let args_cleaned: Vec<String> = args
-        .iter()
-        .filter(|a| {
-            if a == &"--loop" {
-                loop_mode = true;
-                false
-            } else {
-                true
+        if active_modules.is_empty() {
+            println!("No modules registered. Exiting.");
+            return;
+        }
+
+        let loop_mode = cmd._loop;
+        let args_cleaned = cmd.modules;
+
+        if !args_cleaned.is_empty() {
+            active_modules.retain(|m| args_cleaned.contains(&m.name().to_string()));
+        }
+
+        if loop_mode {
+            loop {
+                for module in &active_modules {
+                    print!("\x1B[2J\x1B[1;1H");
+                    module.run(&mut rng);
+                }
             }
-        })
-        .cloned()
-        .collect();
-
-    if !args_cleaned.is_empty() {
-        active_modules.retain(|m| args_cleaned.contains(&m.name().to_string()));
-    }
-
-    if loop_mode {
-        loop {
+        } else {
             for module in &active_modules {
                 print!("\x1B[2J\x1B[1;1H");
                 module.run(&mut rng);
             }
-        }
-    } else {
-        for module in &active_modules {
-            print!("\x1B[2J\x1B[1;1H");
-            module.run(&mut rng);
         }
     }
 }
