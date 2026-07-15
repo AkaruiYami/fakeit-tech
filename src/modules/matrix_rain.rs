@@ -1,13 +1,9 @@
-#![allow(dead_code)]
-
 use std::io::{self, Write};
 use std::thread;
 use std::time::Duration;
 
 use rand::Rng;
 use rand::rngs::ThreadRng;
-
-use crossterm::terminal;
 
 use crate::engine::FakeModule;
 use crate::modules::registry;
@@ -20,40 +16,47 @@ impl FakeModule for MatrixModule {
     }
 
     fn run(&self, rng: &mut ThreadRng) {
-        let (width, height) = match terminal::size() {
-            Ok((w, h)) => (w as usize, h as usize),
-            Err(_) => (80, 24),
+        let (width, height) = match crossterm::terminal::size() {
+            Ok((w, h)) => (
+                (w as usize).saturating_sub(1),
+                (h as usize).saturating_sub(1),
+            ),
+            Err(_) => (79, 23),
         };
 
         let frames = 150;
 
         let mut drops: Vec<usize> = (0..width).map(|_| rng.random_range(0..height)).collect();
 
-        // Clear screen & hide cursor
-        print!("\x1b[2J\x1b[?25l");
+        print!("\x1B[2J\x1B[3J\x1B[H");
+        print!("\x1b[?25l");
         io::stdout().flush().ok();
 
         for _ in 0..frames {
-            print!("\x1b[H");
+            let mut frame = String::with_capacity(width * height * 3);
+            frame.push_str("\x1b[H");
 
             for y in 0..height {
-                (0..width).for_each(|x| {
+                for x in 0..width {
                     if drops[x] == y {
                         let c = rng.random_range(33u8..127u8) as char;
-                        print!("\x1b[92m{}\x1b[0m", c);
+                        frame.push_str(&format!("\x1b[92m{}\x1b[0m", c));
                     } else if drops[x].saturating_sub(1) == y {
                         let c = rng.random_range(33u8..127u8) as char;
-                        print!("\x1b[32m{}\x1b[0m", c);
+                        frame.push_str(&format!("\x1b[32m{}\x1b[0m", c));
                     } else {
-                        print!(" ");
+                        frame.push(' ');
                     }
-                });
-                println!();
+                }
+                if y + 1 < height {
+                    frame.push('\n');
+                }
             }
 
+            print!("{}", frame);
             io::stdout().flush().ok();
 
-            (0..width).for_each(|x| {
+            for x in 0..width {
                 if drops[x] > height {
                     if rng.random_bool(0.08) {
                         drops[x] = 0;
@@ -61,12 +64,11 @@ impl FakeModule for MatrixModule {
                 } else {
                     drops[x] += 1;
                 }
-            });
+            }
 
             thread::sleep(Duration::from_millis(45));
         }
 
-        // Restore cursor
         print!("\x1b[?25h");
         io::stdout().flush().ok();
     }
