@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
@@ -17,4 +18,6 @@ pub struct ModuleConfig {
     pub build: bool,
     pub hack: bool,
     pub ai: bool,
+    pub cypher_square: bool,
+    pub matrix: bool,
 }

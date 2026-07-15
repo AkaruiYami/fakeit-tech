@@ -34,6 +34,6 @@ impl FakeModule for AiModule {
 }
 
 #[ctor::ctor]
-fn register_build() {
+fn register_ai() {
     registry::register(Box::new(AiModule));
 }

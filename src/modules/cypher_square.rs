@@ -2,8 +2,6 @@ use std::io::{self, Write};
 use std::thread;
 use std::time::Duration;
 
-use colored::*;
-use crossterm::terminal;
 use rand::Rng;
 use rand::rngs::ThreadRng;
 
@@ -18,20 +16,18 @@ impl FakeModule for CypherSquare {
     }
 
     fn run(&self, rng: &mut ThreadRng) {
-        let _ = ctrlc::set_handler(|| {
-            print!("\x1B[?25h\x1B[0m");
-            let _ = io::stdout().flush();
-            std::process::exit(0);
-        });
-
-        let mutate_delay = 200; // ms
+        let mutate_delay = 200;
         let error_chance = 0.07;
 
-        let (width, height) = match terminal::size() {
-            Ok((w, h)) => (w as usize, h as usize),
-            Err(_) => (80, 24),
+        let (width, height) = match crossterm::terminal::size() {
+            Ok((w, h)) => (
+                (w as usize).saturating_sub(1) / 2,
+                (h as usize).saturating_sub(1),
+            ),
+            Err(_) => (39, 23),
         };
 
+        print!("\x1B[2J\x1B[3J\x1B[H");
         print!("\x1B[?25l");
         io::stdout().flush().unwrap();
 
@@ -40,37 +36,43 @@ impl FakeModule for CypherSquare {
             .collect();
 
         loop {
-            print!("\x1B[2J\x1B[1;1H");
+            let mut frame = String::with_capacity(width * height * 8);
+            frame.push_str("\x1B[H");
 
-            for row in &grid {
-                for c in row {
-                    if rng.random_bool(error_chance) {
-                        print!("{} ", c.to_string().red());
-                    } else {
-                        print!("{} ", c.to_string().green());
+            for (i, row) in grid.iter().enumerate() {
+                for (j, c) in row.iter().enumerate() {
+                    if j > 0 {
+                        frame.push(' ');
                     }
+                    if rng.random_bool(error_chance) {
+                        frame.push_str("\x1B[31m");
+                    } else {
+                        frame.push_str("\x1B[32m");
+                    }
+                    frame.push(*c);
+                    frame.push_str("\x1B[0m");
                 }
-                println!();
+                if i + 1 < height {
+                    frame.push('\n');
+                }
             }
 
-            print!("\x1B[0m");
+            print!("{}", frame);
 
             for _ in 0..8 {
                 let x = rng.random_range(0..width);
                 let y = rng.random_range(0..height);
-
                 grid[y][x] = random_char(rng);
             }
 
             io::stdout().flush().unwrap();
-
             thread::sleep(Duration::from_millis(mutate_delay));
         }
     }
 }
 
 #[ctor::ctor]
-fn register_build() {
+fn register_cypher_square() {
     registry::register(Box::new(CypherSquare));
 }
 

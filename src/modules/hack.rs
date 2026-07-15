@@ -32,6 +32,6 @@ impl FakeModule for HackModule {
 }
 
 #[ctor::ctor] // <-- run at compile-time before main
-fn register_build() {
+fn register_hack() {
     registry::register(Box::new(HackModule));
 }
