@@ -18,12 +18,6 @@ impl FakeModule for CypherSquare {
     }
 
     fn run(&self, rng: &mut ThreadRng) {
-        let _ = ctrlc::set_handler(|| {
-            print!("\x1B[?25h\x1B[0m");
-            let _ = io::stdout().flush();
-            std::process::exit(0);
-        });
-
         let mutate_delay = 200; // ms
         let error_chance = 0.07;
 
@@ -70,7 +64,7 @@ impl FakeModule for CypherSquare {
 }
 
 #[ctor::ctor]
-fn register_build() {
+fn register_cypher_square() {
     registry::register(Box::new(CypherSquare));
 }
 

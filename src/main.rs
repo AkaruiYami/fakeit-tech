@@ -1,8 +1,10 @@
-// mod config;
-// mod config_loader;
 mod cli;
+mod config;
+mod config_loader;
 mod engine;
 mod modules;
+
+use std::io::{self, Write};
 
 use clap::Parser;
 use modules::registry;
@@ -10,6 +12,12 @@ use modules::registry;
 use crate::cli::Cli;
 
 fn main() {
+    let _ = ctrlc::set_handler(|| {
+        print!("\x1B[?25h\x1B[0m");
+        let _ = io::stdout().flush();
+        std::process::exit(0);
+    });
+
     let cmd = Cli::parse();
 
     if cmd.list {

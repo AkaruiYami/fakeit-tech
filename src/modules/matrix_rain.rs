@@ -20,12 +20,6 @@ impl FakeModule for MatrixModule {
     }
 
     fn run(&self, rng: &mut ThreadRng) {
-        let _ = ctrlc::set_handler(|| {
-            print!("\x1B[?25h\x1B[0m");
-            let _ = io::stdout().flush();
-            std::process::exit(0);
-        });
-
         let (width, height) = match terminal::size() {
             Ok((w, h)) => (w as usize, h as usize),
             Err(_) => (80, 24),
@@ -79,6 +73,6 @@ impl FakeModule for MatrixModule {
 }
 
 #[ctor::ctor]
-fn register_build() {
+fn register_matrix() {
     registry::register(Box::new(MatrixModule));
 }

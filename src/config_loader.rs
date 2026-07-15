@@ -1,8 +1,9 @@
+#![allow(dead_code)]
 use std::{fs, path::PathBuf};
 
 use crate::config::Config;
 
-pub fn load_config() -> Config {
+pub fn load_config() -> Option<Config> {
     let mut path = dirs::config_dir().unwrap_or_else(|| PathBuf::from("."));
 
     path.push("fakeit-tech");
@@ -12,9 +13,9 @@ pub fn load_config() -> Config {
         create_default(&path);
     }
 
-    let content = fs::read_to_string(&path).expect("Failed to read config");
+    let content = fs::read_to_string(&path).ok()?;
 
-    toml::from_str(&content).expect("Invalid config format")
+    toml::from_str(&content).ok()?
 }
 
 fn create_default(path: &PathBuf) {
@@ -31,7 +32,8 @@ delay_max = 800
 build = true
 hack = true
 ai = true
-network = false
+cypher_square = true
+matrix = true
 "#;
 
     fs::write(path, default).ok();
