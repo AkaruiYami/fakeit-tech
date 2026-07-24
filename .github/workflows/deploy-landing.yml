@@ -1,0 +1,43 @@
+name: Deploy Landing Page to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Prepare landing page files
+        run: |
+          mkdir -p _landing/css _landing/js _landing/assets/preview
+          cp index.html _landing/
+          cp css/style.css _landing/css/
+          cp js/main.js _landing/js/
+          cp docs/preview/* _landing/assets/preview/
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: _ghpages
+
+      - name: Deploy to gh-pages
+        run: |
+          cd _ghpages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          rm -rf assets css js index.html
+          cp -r ../_landing/* .
+          git add -A
+          git diff --cached --quiet || git commit -m "deploy: update landing page from main"
+          git push origin gh-pages
