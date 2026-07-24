@@ -1,0 +1,219 @@
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0a0a0a;
+  --bg-card:#1a1a2e;
+  --bg-dark:#0f0f1a;
+  --accent:#00ff41;
+  --accent-dim:#00cc33;
+  --cyan:#00d4ff;
+  --text:#e0e0e0;
+  --text-dim:#888;
+  --border:#222;
+  --radius:8px;
+  --glow:0 0 20px rgba(0,255,65,.15);
+  --glow-strong:0 0 40px rgba(0,255,65,.25);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+a{color:var(--accent);text-decoration:none;transition:color .2s}
+a:hover{color:var(--cyan)}
+
+code{
+  font-family:"SF Mono","Fira Code","Fira Mono",Menlo,Consolas,monospace;
+  background:var(--bg-card);
+  padding:2px 6px;
+  border-radius:4px;
+  font-size:.9em;
+  color:var(--accent);
+}
+
+pre{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px 20px;
+  overflow-x:auto;
+  line-height:1.5;
+}
+pre code{background:none;padding:0;font-size:.85rem;color:var(--text)}
+
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ── Nav ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,10,10,.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:60px;
+}
+.nav-logo{font-family:"SF Mono","Fira Code",monospace;font-weight:700;font-size:1.1rem;color:var(--accent)}
+.nav-links{display:flex;gap:24px}
+.nav-links a{color:var(--text-dim);font-size:.9rem;transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;transition:.3s}
+
+/* ── Hero ── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,255,65,.08) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;
+}
+.hero-sub{
+  font-family:"SF Mono","Fira Code",monospace;font-size:.85rem;
+  color:var(--text-dim);margin-bottom:16px;letter-spacing:1px;
+}
+.hero-title{
+  font-size:clamp(3rem,8vw,6rem);font-weight:800;
+  letter-spacing:-2px;margin-bottom:16px;line-height:1;
+}
+.hero-title .accent{color:var(--accent)}
+.hero-tagline{font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--text);margin-bottom:20px;font-weight:300}
+.hero-tagline em{color:var(--cyan);font-style:normal;font-weight:500}
+.hero-desc{max-width:600px;margin:0 auto 32px;color:var(--text-dim);font-size:1rem}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+
+.btn{
+  display:inline-block;padding:12px 28px;border-radius:var(--radius);
+  font-size:.95rem;font-weight:600;transition:all .2s;cursor:pointer;
+}
+.btn-primary{
+  background:var(--accent);color:#000;
+}
+.btn-primary:hover{background:var(--cyan);color:#000;box-shadow:var(--glow-strong)}
+.btn-secondary{
+  background:transparent;color:var(--accent);
+  border:1px solid var(--accent);
+}
+.btn-secondary:hover{background:var(--accent);color:#000}
+
+.hero-install{
+  font-family:"SF Mono","Fira Code",monospace;font-size:.8rem;
+  color:var(--text-dim);word-break:break-all;
+}
+.hero-install code{background:none;color:var(--accent);font-size:.8rem;padding:0}
+
+/* ── Sections ── */
+.section{padding:100px 0}
+.section-dark{background:var(--bg-dark)}
+.section-title{
+  font-size:clamp(1.8rem,4vw,2.5rem);font-weight:700;text-align:center;
+  margin-bottom:12px;
+}
+.section-sub{text-align:center;color:var(--text-dim);margin-bottom:48px;font-size:1rem}
+
+/* ── Features ── */
+.features-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:24px;margin-top:48px;
+}
+.feature-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:32px 24px;
+  transition:border-color .3s,box-shadow .3s;
+}
+.feature-card:hover{border-color:var(--accent);box-shadow:var(--glow)}
+.feature-icon{font-size:2rem;margin-bottom:12px}
+.feature-card h3{font-size:1.1rem;margin-bottom:8px;color:var(--text)}
+.feature-card p{color:var(--text-dim);font-size:.9rem;line-height:1.6}
+.feature-card code{font-size:.8rem}
+
+/* ── Preview ── */
+.preview-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:24px;margin-top:48px;
+}
+.preview-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  transition:border-color .3s,box-shadow .3s;
+}
+.preview-card:hover{border-color:var(--accent);box-shadow:var(--glow)}
+.preview-video{
+  background:#000;aspect-ratio:16/9;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.preview-video video{width:100%;height:100%;object-fit:cover}
+.preview-info{padding:20px}
+.preview-info h3{font-family:"SF Mono","Fira Code",monospace;color:var(--accent);margin-bottom:6px;font-size:1rem}
+.preview-info p{color:var(--text-dim);font-size:.85rem;line-height:1.5}
+
+/* ── Quick Start ── */
+.quickstart-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:24px;margin-top:48px;
+}
+.quickstart-step{position:relative}
+.step-number{
+  font-family:"SF Mono","Fira Code",monospace;font-size:3rem;
+  font-weight:800;color:var(--accent);opacity:.2;line-height:1;margin-bottom:8px;
+}
+.quickstart-step h3{font-size:1rem;margin-bottom:12px}
+
+/* ── Modules ── */
+.modules-list{max-width:700px;margin:48px auto 0;display:flex;flex-direction:column;gap:12px}
+.module-item{
+  display:flex;gap:16px;align-items:baseline;
+  padding:16px 20px;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:var(--radius);
+  transition:border-color .3s;
+}
+.module-item:hover{border-color:var(--accent)}
+.module-name{
+  font-family:"SF Mono","Fira Code",monospace;
+  color:var(--accent);font-weight:600;font-size:.9rem;
+  min-width:130px;flex-shrink:0;
+}
+.module-desc{color:var(--text-dim);font-size:.9rem}
+
+/* ── Footer ── */
+.footer{
+  padding:60px 0;border-top:1px solid var(--border);text-align:center;
+}
+.footer-logo{
+  font-family:"SF Mono","Fira Code",monospace;font-size:1.2rem;
+  color:var(--accent);margin-bottom:12px;
+}
+.footer p{color:var(--text-dim);font-size:.9rem;margin-bottom:8px}
+.footer-links{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center}
+.footer-sep{color:var(--border)}
+
+/* ── Fade-in animation ── */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .nav-links{
+    display:none;position:absolute;top:60px;left:0;right:0;
+    background:rgba(10,10,10,.95);backdrop-filter:blur(12px);
+    flex-direction:column;padding:24px;gap:16px;
+    border-bottom:1px solid var(--border);
+  }
+  .nav-links.open{display:flex}
+  .nav-toggle{display:block}
+  .hero{min-height:auto;padding:120px 24px 60px}
+  .section{padding:60px 0}
+  .features-grid,.preview-grid,.quickstart-grid{grid-template-columns:1fr}
+  .module-item{flex-direction:column;gap:4px}
+  .module-name{min-width:auto}
+}

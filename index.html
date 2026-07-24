@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fakeit-tech — Feel Like THE Hackerman</title>
+  <meta name="description" content="Hollywood-style hacker terminal effects for demos, videos, and fun. A Rust CLI tool that makes you look like a real hackerman.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">&gt;_ fakeit-tech</a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#preview">Preview</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="https://github.com/AkaruiYami/fakeit-tech" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <header class="hero fade-in">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <p class="hero-sub">&gt; initializing hackerman_protocol.exe ...</p>
+      <h1 class="hero-title">fakeit<span class="accent">-tech</span></h1>
+      <p class="hero-tagline">You don't need to be a real hacker.<br>You just need to <em>look</em> like one.</p>
+      <p class="hero-desc">
+        A small Rust CLI tool that generates Hollywood-style "hacker scene" terminal output —
+        flashy progress bars, cascading code, and cinematic effects. Perfect for demos, videos,
+        livestreams, or just impressing your cat.
+      </p>
+      <div class="hero-actions">
+        <a href="https://github.com/AkaruiYami/fakeit-tech" class="btn btn-primary" target="_blank" rel="noopener">View on GitHub</a>
+        <a href="#quickstart" class="btn btn-secondary">Quick Start</a>
+      </div>
+      <p class="hero-install">
+        <code>git clone https://github.com/AkaruiYami/fakeit-tech.git && cd fakeit-tech && cargo run</code>
+      </p>
+    </div>
+  </header>
+
+  <section id="features" class="section fade-in">
+    <div class="container">
+      <h2 class="section-title">Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🧩</div>
+          <h3>Modular FakeModules</h3>
+          <p>Each effect is a self-contained module. Run them all in sequence or pick your favorite — AI training, build pipelines, cypher grids, matrix rain, and more.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Loop Mode</h3>
+          <p>Throw <code>--loop</code> on any module and it runs forever. Perfect for livestream backgrounds or kiosk demos. Nobody needs to know it's fake.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Extremely Extensible</h3>
+          <p>Drop a new Rust file in <code>src/modules/</code>, implement one trait, register it — done. New effect added in minutes, not hours.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎬</div>
+          <h3>Cinematic Output</h3>
+          <p>Colored terminal output, animated progress bars, randomized characters, dramatic pauses — the full Hollywood hacker experience, right in your terminal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="preview" class="section section-dark fade-in">
+    <div class="container">
+      <h2 class="section-title">See It In Action</h2>
+      <p class="section-sub">Each module produces its own unique cinematic effect. Here's a sneak peek.</p>
+      <div class="preview-grid">
+        <div class="preview-card">
+          <div class="preview-video">
+            <video autoplay loop muted playsinline>
+              <source src="assets/preview/ai.webm" type="video/webm">
+              <source src="assets/preview/ai.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="preview-info">
+            <h3>ai</h3>
+            <p>Blue/green training progress lines that increment to 100%. Fake neural network goodness.</p>
+          </div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-video">
+            <video autoplay loop muted playsinline>
+              <source src="assets/preview/build.webm" type="video/webm">
+              <source src="assets/preview/build.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="preview-info">
+            <h3>build</h3>
+            <p>Full build pipeline simulation — collecting files, random warnings, and a triumphant "Build finished successfully!"</p>
+          </div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-video">
+            <video autoplay loop muted playsinline>
+              <source src="assets/preview/cypher.webm" type="video/webm">
+              <source src="assets/preview/cypher.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="preview-info">
+            <h3>cypher-square</h3>
+            <p>A mutating grid of randomized characters with error highlights. The Matrix called — it wants its aesthetic back.</p>
+          </div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-video">
+            <video autoplay loop muted playsinline>
+              <source src="assets/preview/matrix.webm" type="video/webm">
+              <source src="assets/preview/matrix.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="preview-info">
+            <h3>matrix-rain</h3>
+            <p>Classic falling green characters. Because no hacker scene is complete without it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quickstart" class="section fade-in">
+    <div class="container">
+      <h2 class="section-title">Quick Start</h2>
+      <div class="quickstart-grid">
+        <div class="quickstart-step">
+          <div class="step-number">01</div>
+          <h3>Clone & Build</h3>
+          <pre><code>git clone https://github.com/AkaruiYami/fakeit-tech.git
+cd fakeit-tech
+cargo build --release</code></pre>
+        </div>
+        <div class="quickstart-step">
+          <div class="step-number">02</div>
+          <h3>Run the Full Sequence</h3>
+          <pre><code>./target/release/fakeit-tech</code></pre>
+        </div>
+        <div class="quickstart-step">
+          <div class="step-number">03</div>
+          <h3>Or Pick a Module</h3>
+          <pre><code>./target/release/fakeit-tech ai
+./target/release/fakeit-tech build
+./target/release/fakeit-tech "cypher-square"
+./target/release/fakeit-tech hack</code></pre>
+        </div>
+        <div class="quickstart-step">
+          <div class="step-number">04</div>
+          <h3>Loop It Forever</h3>
+          <pre><code>./target/release/fakeit-tech --loop
+./target/release/fakeit-tech build --loop</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modules" class="section section-dark fade-in">
+    <div class="container">
+      <h2 class="section-title">Modules</h2>
+      <div class="modules-list">
+        <div class="module-item">
+          <span class="module-name">ai</span>
+          <span class="module-desc">Fake neural network training — progress bars, accuracy metrics, and a satisfying 100% completion.</span>
+        </div>
+        <div class="module-item">
+          <span class="module-name">build</span>
+          <span class="module-desc">Build pipeline simulation with source files, warnings, errors, and a successful finish.</span>
+        </div>
+        <div class="module-item">
+          <span class="module-name">cypher-square</span>
+          <span class="module-desc">Mutating character grid with error highlights and hidden cursor. Pure cyberpunk aesthetic.</span>
+        </div>
+        <div class="module-item">
+          <span class="module-name">hack</span>
+          <span class="module-desc">Quick dramatic effect — fake IP display and scanning animation.</span>
+        </div>
+        <div class="module-item">
+          <span class="module-name">matrix-rain</span>
+          <span class="module-desc">Falling green characters. The classic. Always works.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer fade-in">
+    <div class="container footer-inner">
+      <p class="footer-logo">&gt;_ fakeit-tech</p>
+      <p>Built with Rust, caffeine, and questionable life choices.</p>
+      <p class="footer-links">
+        <a href="https://github.com/AkaruiYami/fakeit-tech" target="_blank" rel="noopener">GitHub</a>
+        <span class="footer-sep">·</span>
+        <a href="https://github.com/AkaruiYami/fakeit-tech/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+        <span class="footer-sep">·</span>
+        <span>Made by <a href="https://github.com/AkaruiYami" target="_blank" rel="noopener">AkaruiYami</a></span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
