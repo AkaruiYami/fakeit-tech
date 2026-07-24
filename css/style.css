@@ -171,6 +171,20 @@ pre code{background:none;padding:0;font-size:.85rem;color:var(--text)}
 .quickstart-step pre{flex:1;min-height:130px;display:flex;align-items:center}
 .quickstart-step pre code{white-space:pre}
 
+/* ── Quick Start Tip ── */
+.quickstart-tip{
+  margin-top:32px;padding:20px 24px;
+  background:var(--bg-card);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:var(--radius);
+  color:var(--text-dim);font-size:.9rem;
+}
+.quickstart-tip .tip-icon{
+  color:var(--accent);font-family:"SF Mono","Fira Code",monospace;
+  font-weight:700;margin-right:8px;
+}
+.quickstart-tip p{margin-bottom:0}
+.quickstart-tip pre{margin-top:12px;margin-bottom:0}
+
 /* ── Modules ── */
 .modules-list{max-width:700px;margin:48px auto 0;display:flex;flex-direction:column;gap:12px}
 .module-item{
