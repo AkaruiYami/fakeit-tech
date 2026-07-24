@@ -1,0 +1,28 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#02060a"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="10" fill="url(#bg1)" stroke="#1f3d2c" stroke-width="2"/>
+
+  <!-- cypher-square: 4x4 grid of mutating glyphs -->
+  <g font-family="'Courier New', monospace" font-weight="bold" font-size="11" text-anchor="middle">
+    <text x="16" y="18" fill="#39ff88">A</text>
+    <text x="30" y="18" fill="#0f4d2c">4</text>
+    <text x="44" y="18" fill="#39ff88">F</text>
+
+    <text x="16" y="32" fill="#0f4d2c">9</text>
+    <text x="30" y="32" fill="#ff3b5c">X</text>
+    <text x="44" y="32" fill="#0f4d2c">2</text>
+
+    <text x="16" y="46" fill="#39ff88">C</text>
+    <text x="30" y="46" fill="#0f4d2c">7</text>
+    <text x="44" y="46" fill="#39ff88">E</text>
+  </g>
+
+  <!-- error highlight box around the "wrong" cell -->
+  <rect x="24" y="24" width="12" height="12" fill="none" stroke="#ff3b5c" stroke-width="1.5" opacity="0.8"/>
+</svg>
