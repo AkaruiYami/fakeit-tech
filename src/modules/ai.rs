@@ -3,9 +3,8 @@ use std::time::Duration;
 
 use colored::*;
 use rand::Rng;
-use rand::rngs::ThreadRng;
 
-use crate::engine::FakeModule;
+use crate::engine::{FakeModule, RunContext};
 use crate::modules::registry;
 
 pub struct AiModule;
@@ -15,7 +14,7 @@ impl FakeModule for AiModule {
         "ai"
     }
 
-    fn run(&self, rng: &mut ThreadRng) {
+    fn run(&self, ctx: &mut RunContext) {
         let mut curr_percent = 0;
 
         while curr_percent < 100 {
@@ -23,9 +22,9 @@ impl FakeModule for AiModule {
                 "{}",
                 format!("[AI] Training model: {}%", curr_percent).blue()
             );
-            let delay_ms = rng.random_range(50..=350);
+            let delay_ms = ctx.rng.random_range(ctx.delay_min..=ctx.delay_max);
             thread::sleep(Duration::from_millis(delay_ms));
-            if rng.random_range(0..=100) <= 50 {
+            if ctx.rng.random_range(0..=100) <= 50 {
                 curr_percent += 1;
             }
         }

@@ -1,12 +1,10 @@
-#![allow(dead_code)]
 use std::thread;
 use std::time::Duration;
 
 use colored::*;
 use rand::Rng;
-use rand::rngs::ThreadRng;
 
-use crate::engine::FakeModule;
+use crate::engine::{FakeModule, RunContext};
 use crate::modules::registry;
 
 pub struct HackModule;
@@ -16,22 +14,22 @@ impl FakeModule for HackModule {
         "hack"
     }
 
-    fn run(&self, rng: &mut ThreadRng) {
+    fn run(&self, ctx: &mut RunContext) {
         let ip = format!(
             "{}.{}.{}.{}",
-            rng.random_range(1..255),
-            rng.random_range(1..255),
-            rng.random_range(1..255),
-            rng.random_range(1..255),
+            ctx.rng.random_range(1..255),
+            ctx.rng.random_range(1..255),
+            ctx.rng.random_range(1..255),
+            ctx.rng.random_range(1..255),
         );
 
         println!("{}", format!("[HACK] Scanning {}", ip).red());
-        let delay_ms = rng.random_range(50..=350);
+        let delay_ms = ctx.rng.random_range(ctx.delay_min..=ctx.delay_max);
         thread::sleep(Duration::from_millis(delay_ms));
     }
 }
 
-#[ctor::ctor] // <-- run at compile-time before main
+#[ctor::ctor]
 fn register_hack() {
     registry::register(Box::new(HackModule));
 }

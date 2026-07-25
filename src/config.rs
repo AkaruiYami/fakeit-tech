@@ -1,9 +1,10 @@
-#![allow(dead_code)]
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Default)]
 pub struct Config {
+    #[serde(default)]
     pub core: CoreConfig,
+    #[serde(default)]
     pub modules: ModuleConfig,
 }
 
@@ -13,11 +14,20 @@ pub struct CoreConfig {
     pub delay_max: u64,
 }
 
-#[derive(Deserialize, Debug)]
+impl Default for CoreConfig {
+    fn default() -> Self {
+        Self {
+            delay_min: 200,
+            delay_max: 800,
+        }
+    }
+}
+
+#[derive(Deserialize, Debug, Default)]
 pub struct ModuleConfig {
-    pub build: bool,
-    pub hack: bool,
-    pub ai: bool,
-    pub cypher_square: bool,
-    pub matrix: bool,
+    pub build: Option<bool>,
+    pub hack: Option<bool>,
+    pub ai: Option<bool>,
+    pub cypher_square: Option<bool>,
+    pub matrix: Option<bool>,
 }
