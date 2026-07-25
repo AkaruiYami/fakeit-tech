@@ -22,7 +22,7 @@ fn main() {
     let cmd = Cli::parse();
 
     if cmd.list {
-        let registered_modules = registry::get_registered();
+        let registered_modules = registry::take_registered();
         println!("The following are modules that can be call:");
         for module in registered_modules {
             let name = module.name();
@@ -30,7 +30,7 @@ fn main() {
         }
     } else {
         let mut rng = rand::rng();
-        let mut active_modules = registry::get_registered();
+        let mut active_modules = registry::take_registered();
 
         if active_modules.is_empty() {
             println!("No modules registered. Exiting.");
