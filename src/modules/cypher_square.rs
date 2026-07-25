@@ -34,7 +34,9 @@ impl FakeModule for CypherSquare {
             .map(|_| (0..width).map(|_| random_char(ctx.rng)).collect())
             .collect();
 
-        loop {
+        let frames = 150;
+
+        for _ in 0..frames {
             let mut frame = String::with_capacity(width * height * 8);
             frame.push_str("\x1B[H");
 
@@ -67,6 +69,9 @@ impl FakeModule for CypherSquare {
             io::stdout().flush().unwrap();
             thread::sleep(Duration::from_millis(ctx.delay_min));
         }
+
+        print!("\x1b[?25h");
+        io::stdout().flush().ok();
     }
 }
 
