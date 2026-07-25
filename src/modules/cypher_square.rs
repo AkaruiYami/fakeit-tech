@@ -5,7 +5,7 @@ use std::time::Duration;
 use rand::Rng;
 use rand::rngs::ThreadRng;
 
-use crate::engine::FakeModule;
+use crate::engine::{FakeModule, RunContext};
 use crate::modules::registry;
 
 pub struct CypherSquare;
@@ -15,8 +15,7 @@ impl FakeModule for CypherSquare {
         "cypher-square"
     }
 
-    fn run(&self, rng: &mut ThreadRng) {
-        let mutate_delay = 200;
+    fn run(&self, ctx: &mut RunContext) {
         let error_chance = 0.07;
 
         let (width, height) = match crossterm::terminal::size() {
@@ -32,10 +31,12 @@ impl FakeModule for CypherSquare {
         io::stdout().flush().unwrap();
 
         let mut grid: Vec<Vec<char>> = (0..height)
-            .map(|_| (0..width).map(|_| random_char(rng)).collect())
+            .map(|_| (0..width).map(|_| random_char(ctx.rng)).collect())
             .collect();
 
-        loop {
+        let frames = 150;
+
+        for _ in 0..frames {
             let mut frame = String::with_capacity(width * height * 8);
             frame.push_str("\x1B[H");
 
@@ -44,7 +45,7 @@ impl FakeModule for CypherSquare {
                     if j > 0 {
                         frame.push(' ');
                     }
-                    if rng.random_bool(error_chance) {
+                    if ctx.rng.random_bool(error_chance) {
                         frame.push_str("\x1B[31m");
                     } else {
                         frame.push_str("\x1B[32m");
@@ -60,14 +61,17 @@ impl FakeModule for CypherSquare {
             print!("{}", frame);
 
             for _ in 0..8 {
-                let x = rng.random_range(0..width);
-                let y = rng.random_range(0..height);
-                grid[y][x] = random_char(rng);
+                let x = ctx.rng.random_range(0..width);
+                let y = ctx.rng.random_range(0..height);
+                grid[y][x] = random_char(ctx.rng);
             }
 
             io::stdout().flush().unwrap();
-            thread::sleep(Duration::from_millis(mutate_delay));
+            thread::sleep(Duration::from_millis(ctx.delay_min));
         }
+
+        print!("\x1b[?25h");
+        io::stdout().flush().ok();
     }
 }
 

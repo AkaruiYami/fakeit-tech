@@ -4,7 +4,7 @@ use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
 use std::{thread, time::Duration};
 
-use crate::engine::FakeModule;
+use crate::engine::{FakeModule, RunContext};
 use crate::modules::registry;
 
 pub struct BuildModule;
@@ -14,7 +14,7 @@ impl FakeModule for BuildModule {
         "build"
     }
 
-    fn run(&self, rng: &mut ThreadRng) {
+    fn run(&self, ctx: &mut RunContext) {
         let steps = [
             "Collecting source files",
             "Loading assets",
@@ -41,27 +41,23 @@ impl FakeModule for BuildModule {
             "/opt/sdk/resources".to_string(),
         ];
 
-        // Divide 0..100% evenly across steps
         let total_steps = steps.len();
         let mut current_percent = 0;
 
         for (i, step) in steps.iter().enumerate() {
-            let color = colors.choose(rng).unwrap();
+            let color = colors.choose(ctx.rng).unwrap();
 
-            // Calculate approximate progress range for this step
             let step_percent_start = current_percent;
             let step_percent_end = ((i + 1) * 100 / total_steps) as u8;
 
-            // Resource-heavy steps
             if step.contains("Collecting")
                 || step.contains("Loading")
                 || step.contains("Processing")
             {
-                let num_files = rng.random_range(7..55);
+                let num_files = ctx.rng.random_range(7..55);
                 for j in 0..num_files {
-                    let path = generate_fake_path(rng, &roots);
+                    let path = generate_fake_path(ctx.rng, &roots);
 
-                    // Progress increments within step
                     let percent = step_percent_start
                         + (((step_percent_end - step_percent_start) as usize * j) / num_files)
                             as u8;
@@ -73,13 +69,13 @@ impl FakeModule for BuildModule {
                         path.bright_black()
                     );
 
-                    let delay_ms = rng.random_range(50..=350);
+                    let delay_ms = ctx.rng.random_range(ctx.delay_min..=ctx.delay_max);
                     thread::sleep(Duration::from_millis(delay_ms));
                 }
             } else {
                 let percent = step_percent_end;
 
-                let chance: f32 = rng.random();
+                let chance: f32 = ctx.rng.random();
                 if chance < 0.1 {
                     println!(
                         "{}",
@@ -90,26 +86,23 @@ impl FakeModule for BuildModule {
                         "{}",
                         format!("[ERROR] {}: failed to resolve dependency", step).red()
                     );
-                    let delay_ms = rng.random_range(500..=750);
+                    let delay_ms = ctx.rng.random_range(ctx.delay_min..=ctx.delay_max);
                     thread::sleep(Duration::from_millis(delay_ms));
                 } else {
                     println!("[{}%] {}", percent, step.color(*color));
                 }
 
-                // Simulate processing time
-                let delay_ms = rng.random_range(300..=650);
+                let delay_ms = ctx.rng.random_range(ctx.delay_min..=ctx.delay_max);
                 thread::sleep(Duration::from_millis(delay_ms));
             }
 
             current_percent = step_percent_end;
         }
 
-        // Build complete
         println!("{}", "[100%] Build finished successfully!".green().bold());
     }
 }
 
-// Generate fake paths
 fn generate_fake_path(rng: &mut ThreadRng, roots: &[String]) -> String {
     let folders = [
         "src", "core", "utils", "assets", "textures", "audio", "shaders", "config", "vendor",
@@ -127,7 +120,6 @@ fn generate_fake_path(rng: &mut ThreadRng, roots: &[String]) -> String {
 
     let root = roots.choose(rng).unwrap();
 
-    // Random depth
     let depth = rng.random_range(2..=5);
     let mut path = root.clone();
 
@@ -144,7 +136,7 @@ fn generate_fake_path(rng: &mut ThreadRng, roots: &[String]) -> String {
     format!("{}/{}_{}.{}", path, name, id, ext)
 }
 
-#[ctor::ctor] // <-- run at compile-time before main
+#[ctor::ctor]
 fn register_build() {
     registry::register(Box::new(BuildModule));
 }

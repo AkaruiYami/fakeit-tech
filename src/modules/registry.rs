@@ -11,7 +11,7 @@ pub fn register(module: Box<dyn FakeModule + Send>) {
     MODULES.lock().unwrap().push(module);
 }
 
-// Function to retrieve registered modules
-pub fn get_registered() -> Vec<Box<dyn FakeModule + Send>> {
+// Take all registered modules out of the registry (consumes them)
+pub fn take_registered() -> Vec<Box<dyn FakeModule + Send>> {
     MODULES.lock().unwrap().drain(..).collect()
 }

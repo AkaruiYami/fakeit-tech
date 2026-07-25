@@ -3,9 +3,8 @@ use std::thread;
 use std::time::Duration;
 
 use rand::Rng;
-use rand::rngs::ThreadRng;
 
-use crate::engine::FakeModule;
+use crate::engine::{FakeModule, RunContext};
 use crate::modules::registry;
 
 pub struct MatrixModule;
@@ -15,7 +14,7 @@ impl FakeModule for MatrixModule {
         "matrix"
     }
 
-    fn run(&self, rng: &mut ThreadRng) {
+    fn run(&self, ctx: &mut RunContext) {
         let (width, height) = match crossterm::terminal::size() {
             Ok((w, h)) => (
                 (w as usize).saturating_sub(1),
@@ -26,7 +25,9 @@ impl FakeModule for MatrixModule {
 
         let frames = 150;
 
-        let mut drops: Vec<usize> = (0..width).map(|_| rng.random_range(0..height)).collect();
+        let mut drops: Vec<usize> = (0..width)
+            .map(|_| ctx.rng.random_range(0..height))
+            .collect();
 
         print!("\x1B[2J\x1B[3J\x1B[H");
         print!("\x1b[?25l");
@@ -39,10 +40,10 @@ impl FakeModule for MatrixModule {
             for y in 0..height {
                 for x in 0..width {
                     if drops[x] == y {
-                        let c = rng.random_range(33u8..127u8) as char;
+                        let c = ctx.rng.random_range(33u8..127u8) as char;
                         frame.push_str(&format!("\x1b[92m{}\x1b[0m", c));
                     } else if drops[x].saturating_sub(1) == y {
-                        let c = rng.random_range(33u8..127u8) as char;
+                        let c = ctx.rng.random_range(33u8..127u8) as char;
                         frame.push_str(&format!("\x1b[32m{}\x1b[0m", c));
                     } else {
                         frame.push(' ');
@@ -58,7 +59,7 @@ impl FakeModule for MatrixModule {
 
             for x in 0..width {
                 if drops[x] > height {
-                    if rng.random_bool(0.08) {
+                    if ctx.rng.random_bool(0.08) {
                         drops[x] = 0;
                     }
                 } else {
@@ -66,7 +67,7 @@ impl FakeModule for MatrixModule {
                 }
             }
 
-            thread::sleep(Duration::from_millis(45));
+            thread::sleep(Duration::from_millis(ctx.delay_min));
         }
 
         print!("\x1b[?25h");
