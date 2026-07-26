@@ -1,7 +1,7 @@
 use colored::*;
-use rand::Rng;
 use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
+use rand::Rng;
 use std::{thread, time::Duration};
 
 use crate::engine::{FakeModule, RunContext};
@@ -59,8 +59,8 @@ impl FakeModule for BuildModule {
                     let path = generate_fake_path(ctx.rng, &roots);
 
                     let percent = step_percent_start
-                        + (((step_percent_end - step_percent_start) as usize * j) / num_files)
-                            as u8;
+                        + (((step_percent_end.saturating_sub(step_percent_start)) as usize * j)
+                            / num_files) as u8;
 
                     println!(
                         "[{}%] {} -> {}",
