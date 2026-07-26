@@ -50,24 +50,20 @@
       <h2 class="section-title">Features</h2>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">🧩</div>
           <h3>Modular FakeModules</h3>
           <p>Each effect is a self-contained module. Run them all in sequence or pick your favorite: AI training, build pipelines, cypher grids, matrix rain, and more.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🔄</div>
           <h3>Loop Mode</h3>
-          <p>Throw <code>--loop</code> on any module and it runs forever. Perfect for livestream backgrounds or kiosk demos. Nobody needs to know it's fake.</p>
+          <p>Throw <code>--loop</code> on any module and it runs forever.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">⚡</div>
           <h3>Extremely Extensible</h3>
-          <p>Drop a new Rust file in <code>src/modules/</code>, implement one trait, register it, and you're done. New effect added in minutes, not hours.</p>
+          <p>Drop a new Rust file in <code>src/modules/</code>, implement one trait, register it, and you're done. New effects in minutes.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🎬</div>
           <h3>Cinematic Output</h3>
-          <p>Colored terminal output, animated progress bars, randomized characters, dramatic pauses, the full Hollywood hacker experience, right in your terminal.</p>
+          <p>Colored output, animated progress bars, randomized characters.</p>
         </div>
       </div>
     </div>
@@ -87,7 +83,7 @@
           </div>
           <div class="preview-info">
             <h3>ai</h3>
-            <p>Blue/green training progress lines that increment to 100%. Fake neural network goodness.</p>
+            <p>Blue/green training progress lines that increment to 100%.</p>
           </div>
         </div>
         <div class="preview-card">
@@ -99,7 +95,7 @@
           </div>
           <div class="preview-info">
             <h3>build</h3>
-            <p>Full build pipeline simulation: collecting files, random warnings, and a triumphant "Build finished successfully!"</p>
+            <p>Full build pipeline simulation: collecting files, random warnings, and a "Build finished successfully!" message.</p>
           </div>
         </div>
         <div class="preview-card">
@@ -123,7 +119,7 @@
           </div>
           <div class="preview-info">
             <h3>matrix-rain</h3>
-            <p>Classic falling green characters. Because no hacker scene is complete without it.</p>
+            <p>Classic falling green characters.</p>
           </div>
         </div>
       </div>
@@ -175,7 +171,7 @@ cargo build --release</code></pre>
       <div class="modules-list">
         <div class="module-item">
           <span class="module-name">ai</span>
-          <span class="module-desc">Fake neural network training: progress bars, accuracy metrics, and a satisfying 100% completion.</span>
+          <span class="module-desc">Fake neural network training with progress bars, accuracy metrics, and a 100% completion.</span>
         </div>
         <div class="module-item">
           <span class="module-name">build</span>
@@ -183,7 +179,7 @@ cargo build --release</code></pre>
         </div>
         <div class="module-item">
           <span class="module-name">cypher-square</span>
-          <span class="module-desc">Mutating character grid with error highlights and hidden cursor. Pure cyberpunk aesthetic.</span>
+          <span class="module-desc">Mutating character grid with error highlights and hidden cursor.</span>
         </div>
         <div class="module-item">
           <span class="module-name">hack</span>
@@ -191,16 +187,27 @@ cargo build --release</code></pre>
         </div>
         <div class="module-item">
           <span class="module-name">matrix-rain</span>
-          <span class="module-desc">Falling green characters. The classic. Always works.</span>
+          <span class="module-desc">Falling green characters.</span>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="why" class="section fade-in">
+    <div class="container">
+      <h2 class="section-title">Why I Built This</h2>
+      <p>I was bored and wanted to build something that looked cool even if it
+      was ultimately pointless. Partly an excuse to get more comfortable with
+      Rust, partly because I thought hacker terminals in movies looked neat.</p>
+      <p>That's it. No grand vision. Just a fun weekend project that turned
+      into something I'm mildly proud of.</p>
     </div>
   </section>
 
   <footer class="footer fade-in">
     <div class="container footer-inner">
       <p class="footer-logo">&gt;_ fakeit-tech</p>
-      <p>Built with Rust, caffeine, and questionable life choices.</p>
+      <p>Built with Rust, caffeine, and open source.</p>
       <p class="footer-links">
         <a href="https://github.com/AkaruiYami/fakeit-tech" target="_blank" rel="noopener">GitHub</a>
         <span class="footer-sep">·</span>
